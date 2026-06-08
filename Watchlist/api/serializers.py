@@ -2,9 +2,16 @@ from rest_framework import serializers
 
 from Watchlist.models import Movie 
 
+
+def name_length(value):
+    if len(value) > 30 :
+        raise serializers.ValidationError('Name is too long')
+    else:
+        return value
+
 class MovieSerializer(serializers.Serializer):
     id = serializers.IntegerField(read_only =True)
-    name = serializers.CharField()
+    name = serializers.CharField(validators =[name_length])
     description = serializers.CharField()
     active = serializers.BooleanField()
     
@@ -19,9 +26,38 @@ class MovieSerializer(serializers.Serializer):
         return instance
       
 #There are 3 types of validations:
+
 #Field Level Validation :
+#Syntaxt:
+# def validate_<field_name>(self, value):
+#     # validation logic
+#     return value
+
+
     def validate_name(self, value):
-        if len(value) < 2:
+        if len(value) < 3:
             raise serializers.ValidationError('Name is too short')
         else:
             return value
+  
+        
+#Object level validation: Works wiithin an object of database.
+#Syntax:
+# def validate(self, data):
+#     validation logic
+#     return data
+
+    def validate(self, data):
+        if data['name'] == data['description']:
+            raise serializers.ValidationError('Name and Description can not be same!')
+        else:
+            return data
+        
+#Validators: Validators are reusable validation functions or classes that can be attached directly to serializer fields.
+# They are useful when the same validation logic is needed in multiple serializers.
+
+#syntax :
+# field_name = serializers.CharField(validators=[validator_function])
+# def validator_function(value):
+    # validation logic
+    # return value
