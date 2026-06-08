@@ -17,5 +17,11 @@ class MovieSerializer(serializers.Serializer):
         instance.active = validated_data.get('active', instance.active)
         instance.save()
         return instance
-        
-        
+      
+#There are 3 types of validations:
+#Field Level Validation :
+    def validate_name(self, value):
+        if len(value) < 2:
+            raise serializers.ValidationError('Name is too short')
+        else:
+            return value
