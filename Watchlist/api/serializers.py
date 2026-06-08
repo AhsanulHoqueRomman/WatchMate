@@ -3,6 +3,11 @@ from rest_framework import serializers
 from Watchlist.models import Movie 
 
 
+
+#Below are the serializer class:
+
+'''
+
 def name_length(value):
     if len(value) > 30 :
         raise serializers.ValidationError('Name is too long')
@@ -61,3 +66,27 @@ class MovieSerializer(serializers.Serializer):
 # def validator_function(value):
     # validation logic
     # return value
+    
+    
+'''
+
+#Now here is the ModelSerializer classes:
+
+class MovieSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Movie
+        fields = '__all__'
+        # fields = ('id', 'name', 'description')
+        # exclude = ('active')        #all the fields are included except active field.
+        
+    def validate_name(self, value):
+        if len(value) < 3:
+            raise serializers.ValidationError('Name is too short')
+        else:
+            return value
+        
+    def validate(self, data):
+        if data['name'] == data['description']:
+            raise serializers.ValidationError('Name and Description can not be same!')
+        else:
+            return data
