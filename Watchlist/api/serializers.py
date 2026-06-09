@@ -73,11 +73,18 @@ class MovieSerializer(serializers.Serializer):
 #Now here is the ModelSerializer classes:
 
 class MovieSerializer(serializers.ModelSerializer):
+    
+    len_of_name = serializers.SerializerMethodField()
+    
     class Meta:
         model = Movie
         fields = '__all__'
         # fields = ('id', 'name', 'description')
         # exclude = ('active')        #all the fields are included except active field.
+        
+    def get_len_of_name(self, object):
+        length = len(object.name)
+        return length
         
     def validate_name(self, value):
         if len(value) < 3:
