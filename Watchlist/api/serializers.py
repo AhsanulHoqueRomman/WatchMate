@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from Watchlist.models import Movie 
+from Watchlist.models import WatchList, StreamPlatform
 
 
 
@@ -72,6 +72,7 @@ class MovieSerializer(serializers.Serializer):
 
 #Now here is the ModelSerializer classes:
 
+'''
 class MovieSerializer(serializers.ModelSerializer):
     
     len_of_name = serializers.SerializerMethodField()
@@ -98,3 +99,19 @@ class MovieSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError('Name and Description can not be same!')
         else:
             return data
+            
+            
+'''
+
+class WatchListSerializer(serializers.ModelSerializer):
+    
+    
+    class Meta:
+        model = WatchList
+        fields = '__all__'
+        
+class StreamPlatformSerializer(serializers.ModelSerializer):
+    
+    class Meta:
+        model = StreamPlatform
+        fields = '__all__'
