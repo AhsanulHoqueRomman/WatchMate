@@ -19,6 +19,7 @@ class StreamPlatform(models.Model):
 class WatchList(models.Model):
     title = models.CharField(max_length=50)
     description = models.TextField()
+    platform = models.ForeignKey(StreamPlatform , on_delete=models.CASCADE, related_name='watchlist')
     is_released = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
     
