@@ -101,7 +101,7 @@ class StreamPlatformAV(APIView):
     
     def get(self, request):
         platform = StreamPlatform.objects.all()
-        serializer = StreamPlatformSerializer(platform,  many=True)
+        serializer = StreamPlatformSerializer(platform,  many=True)     #To use the HyperlinkedRelatedField we have to pass 'context ={''request':request}'
         return Response(serializer.data, status=status.HTTP_200_OK)
     
     def post (self, request):
