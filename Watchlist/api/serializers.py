@@ -105,10 +105,11 @@ class MovieSerializer(serializers.ModelSerializer):
 
 class WatchListSerializer(serializers.ModelSerializer):
     
-    
     class Meta:
         model = WatchList
         fields = '__all__'
+        
+        
         
 class StreamPlatformSerializer(serializers.ModelSerializer):
     watchlist = WatchListSerializer(many=True, read_only=True)
