@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from Watchlist.models import WatchList, StreamPlatform
+from Watchlist.models import WatchList, StreamPlatform, Review
 
 
 
@@ -103,8 +103,16 @@ class MovieSerializer(serializers.ModelSerializer):
             
 '''
 
-class WatchListSerializer(serializers.ModelSerializer):
-    
+class ReviewSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Review
+        fields = '__all__'
+
+
+
+# class WatchListSerializer(serializers.HyperlinkedModelSerializer):
+class WatchListSerializer(serializers.ModelSerializer):    
+    reviews = ReviewSerializer(many=True, read_only=True)
     class Meta:
         model = WatchList
         fields = '__all__'
