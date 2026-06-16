@@ -4,14 +4,14 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 
 
 
-# class StreamPlatform(models.Model):
-#     name = models.CharField(max_length=100)
-#     about = models.CharField(max_length=200)
-#     website = models.URLField(max_length=100)
+class StreamPlatform(models.Model):
+    name = models.CharField(max_length=100)
+    about = models.CharField(max_length=200)
+    website = models.URLField(max_length=100)
     
     
-#     def __str__(self):
-#         return self.name
+    def __str__(self):
+        return self.name
     
 
 

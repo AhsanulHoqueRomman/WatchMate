@@ -1,10 +1,12 @@
 from django.shortcuts import render
 from rest_framework.response import Response
-from Watchlist.models import WatchList, StreamPlatform
-from Watchlist.api.serializers import WatchListSerializer, StreamPlatformSerializer
 from rest_framework.decorators import api_view
 from rest_framework.views import APIView
 from rest_framework import status
+from rest_framework import mixins, generics
+
+from Watchlist.models import WatchList, StreamPlatform, Review
+from Watchlist.api.serializers import WatchListSerializer, StreamPlatformSerializer, ReviewSerializer
 
 
 #Below are the FUNCTION BASED VIEWS:
@@ -49,6 +51,8 @@ def movie_details(request,pk):
         return Response(status=status.HTTP_204_NO_CONTENT)
         
 '''
+
+
 
 class WatchListAV(APIView):
     
@@ -140,3 +144,27 @@ class StreamPlatformDetailAV(APIView):
             return Response({'error': 'Not found.'}, status=status.HTTP_404_NOT_FOUND)
         platform.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+    
+class ReviewList(mixins.ListModelMixin, mixins.CreateModelMixin, generics.GenericAPIView):
+    queryset = Review.objects.all()
+    serializer_class = ReviewSerializer
+    
+    def get(self, request):
+        return self.list(request)
+    
+    def post(self, request):
+        return self.create(request)
+    
+
+class ReviewDetails(mixins.RetrieveModelMixin, mixins.UpdateModelMixin, mixins.DestroyModelMixin, generics.GenericAPIView):
+    queryset = Review.objects.all()
+    serializer_class = ReviewSerializer
+    
+    def get(self, request, pk):
+        return self.retrieve(request, pk)
+    
+    def put(self, request, pk):
+        return self.update(request, pk)
+    
+    def delete(self, request, pk):
+        return self.destroy(request, pk)
