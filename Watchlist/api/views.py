@@ -144,7 +144,12 @@ class StreamPlatformDetailAV(APIView):
             return Response({'error': 'Not found.'}, status=status.HTTP_404_NOT_FOUND)
         platform.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
-    
+
+
+#Using Mixins
+
+'''
+  
 class ReviewList(mixins.ListModelMixin, mixins.CreateModelMixin, generics.GenericAPIView):
     queryset = Review.objects.all()
     serializer_class = ReviewSerializer
@@ -168,3 +173,16 @@ class ReviewDetails(mixins.RetrieveModelMixin, mixins.UpdateModelMixin, mixins.D
     
     def delete(self, request, pk):
         return self.destroy(request, pk)
+        
+'''
+
+
+#Usinng Concrete view classes - Gnereic APIView classes
+
+class ReviewList(generics.ListCreateAPIView):
+    queryset = Review.objects.all()
+    serializer_class = ReviewSerializer
+    
+class ReviewDetails(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Review.objects.all()
+    serializer_class = ReviewSerializer
