@@ -179,13 +179,26 @@ class ReviewDetails(mixins.RetrieveModelMixin, mixins.UpdateModelMixin, mixins.D
 
 #Usinng Concrete view classes - Gnereic APIView classes
 
-class ReviewList(generics.ListAPIView):
+class ReviewListCreate(generics.ListCreateAPIView):
     # queryset = Review.objects.all()
     serializer_class = ReviewSerializer
     
     def get_queryset(self):
         pk = self.kwargs['pk']
         return Review.objects.filter(watchlist = pk)
+    
+    def perform_create(self, serializer):
+        pk = self.kwargs['pk']
+        watchlist = WatchList.objects.get(pk=pk)
+        serializer.save(watchlist=watchlist)
+    
+# class ReviewCreate(generics.CreateAPIView):
+#     serializer_class = ReviewSerializer
+    
+#     def perform_create(self, serializer):
+#         pk = self.kwargs['pk']
+#         watchlist = WatchList.objects.get(pk=pk)
+#         serializer.save(watchlist=watchlist)
     
 class ReviewDetails(generics.RetrieveUpdateDestroyAPIView):
     queryset = Review.objects.all()
