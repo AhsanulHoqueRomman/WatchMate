@@ -4,6 +4,7 @@ from rest_framework.decorators import api_view
 from rest_framework.views import APIView
 from rest_framework import status
 from rest_framework import mixins, generics
+from rest_framework import viewsets
 
 from Watchlist.models import WatchList, StreamPlatform, Review
 from Watchlist.api.serializers import WatchListSerializer, StreamPlatformSerializer, ReviewSerializer
@@ -100,7 +101,11 @@ class WatchDetailsAV(APIView):
         movie.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
         
-    
+
+#Using APIView:
+
+'''
+
 class StreamPlatformAV(APIView):
     
     def get(self, request):
@@ -144,6 +149,8 @@ class StreamPlatformDetailAV(APIView):
             return Response({'error': 'Not found.'}, status=status.HTTP_404_NOT_FOUND)
         platform.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+'''
 
 
 #Using Mixins
@@ -203,3 +210,51 @@ class ReviewListCreate(generics.ListCreateAPIView):
 class ReviewDetails(generics.RetrieveUpdateDestroyAPIView):
     queryset = Review.objects.all()
     serializer_class = ReviewSerializer
+
+
+
+#Using viewsets.ViewSet class- We have to manually write individual function to list,create,post,update,delete.
+
+class StreamPlatform(viewsets.ViewSet):
+    def list(self, request):
+        platforms = StreamPlatform.objects.all()
+        serializer = StreamPlatformSerializer(platforms, many=True)
+        return Response(serializer.data)
+    
+    def create(self, request):
+        serializer = StreamPlatformSerializer(data = request.data)
+        if serializer.is_valid():
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    def retrieve(self, request, pk=None):
+        try:
+            platform = StreamPlatform.objects.get(pk=pk)
+        except StreamPlatform.DoesNotExist:
+            return Response({'error': 'Not found.'}, status=status.HTTP_404_NOT_FOUND)
+        serializer = StreamPlatformSerializer(platform)
+        return Response(serializer.data,  status=status.HTTP_200_OK)
+    
+    def update(self, request, pk=None):
+        try:
+            platform = StreamPlatform.objects.get( pk=pk)
+        except StreamPlatform.DoesNotExist:
+            return Response({'error': 'Not found.'}, status=status.HTTP_404_NOT_FOUND)
+        serializer = StreamPlatformSerializer(platform,  data = request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    def destroy(self, request, pk=None):
+        try:
+            platform = StreamPlatform.objects.get( pk=pk)
+        except StreamPlatform.DoesNotExist:
+            return Response({'error': 'Not found.'}, status=status.HTTP_404_NOT_FOUND)
+        platform.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+        
+        
+        
+        
+
