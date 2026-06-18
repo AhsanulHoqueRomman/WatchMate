@@ -215,7 +215,9 @@ class ReviewDetails(generics.RetrieveUpdateDestroyAPIView):
 
 #Using viewsets.ViewSet class- We have to manually write individual function to list,create,post,update,delete.
 
-class StreamPlatform(viewsets.ViewSet):
+'''
+
+class StreamPlatformVS(viewsets.ViewSet):
     def list(self, request):
         platforms = StreamPlatform.objects.all()
         serializer = StreamPlatformSerializer(platforms, many=True)
@@ -224,6 +226,7 @@ class StreamPlatform(viewsets.ViewSet):
     def create(self, request):
         serializer = StreamPlatformSerializer(data = request.data)
         if serializer.is_valid():
+            serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
@@ -254,7 +257,23 @@ class StreamPlatform(viewsets.ViewSet):
         platform.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
         
-        
-        
-        
+'''
+
+
+# Using ModelViewSet -We don't have to write all the fucntions like ViewSet class. we just have to write the queryset and the serializer class.
+
+class StreamPlatformVS(viewsets.ModelViewSet):
+    queryset = StreamPlatform.objects.all()
+    serializer_class = StreamPlatformSerializer
+    
+    
+    
+#  There is another class named ReadOnlyModelViewSet which is used for Read Only uses in full element list or individual list.
+
+'''
+class StreamPlatformVS(viewsets.ReadOnlyModelViewSet):
+    queryset = StreamPlatform.objects.all()
+    serializer_class = StreamPlatformSerializer
+
+'''
 

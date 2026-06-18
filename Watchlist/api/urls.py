@@ -1,10 +1,10 @@
 from django.urls import path, include
 from . import views
 from rest_framework.routers import DefaultRouter
-from Watchlist.api.views import StreamPlatform
+from Watchlist.api.views import StreamPlatformVS
 
 router = DefaultRouter()
-router.register('stream', StreamPlatform , basename='stream' )
+router.register('stream', StreamPlatformVS , basename='stream' )
 
 urlpatterns = [
     path('list/', views.WatchListAV.as_view(), name='WatchListAV'),
@@ -13,7 +13,8 @@ urlpatterns = [
     #APIView class Urls:
     # path('stream/', views.StreamPlatformAV.as_view(), name='stream'),
     # path('stream/<int:pk>', views.StreamPlatformDetailAV.as_view() , name='streamDetails'),
-    #router urls:
+    
+    #VS router urls:
     path('', include(router.urls)),
     
     # path('reviews/', views.ReviewList.as_view(), name='ReviewList'),
