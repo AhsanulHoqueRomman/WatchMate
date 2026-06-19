@@ -5,6 +5,8 @@ from rest_framework.views import APIView
 from rest_framework import status
 from rest_framework import mixins, generics
 from rest_framework import viewsets
+from rest_framework.exceptions import ValidationError
+from rest_framework.permissions import IsAuthenticated
 
 from Watchlist.models import WatchList, StreamPlatform, Review
 from Watchlist.api.serializers import WatchListSerializer, StreamPlatformSerializer, ReviewSerializer
@@ -189,6 +191,8 @@ class ReviewDetails(mixins.RetrieveModelMixin, mixins.UpdateModelMixin, mixins.D
 class ReviewListCreate(generics.ListCreateAPIView):
     # queryset = Review.objects.all()
     serializer_class = ReviewSerializer
+    permission_classes = [IsAuthenticated]
+    
     
     def get_queryset(self):
         pk = self.kwargs['pk']
@@ -197,7 +201,12 @@ class ReviewListCreate(generics.ListCreateAPIView):
     def perform_create(self, serializer):
         pk = self.kwargs['pk']
         watchlist = WatchList.objects.get(pk=pk)
-        serializer.save(watchlist=watchlist)
+        
+        reviewer = self.request.user
+        reviewer_queryset = Review.objects.filter(watchlist = watchlist, reviewer=reviewer)
+        if reviewer_queryset.exists():
+            raise ValidationError("You have already reviewd this content!")
+        serializer.save(watchlist=watchlist, reviewer=reviewer)
     
 # class ReviewCreate(generics.CreateAPIView):
 #     serializer_class = ReviewSerializer

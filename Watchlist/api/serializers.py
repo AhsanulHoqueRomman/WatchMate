@@ -104,6 +104,7 @@ class MovieSerializer(serializers.ModelSerializer):
 '''
 
 class ReviewSerializer(serializers.ModelSerializer):
+    reviewer = serializers.StringRelatedField(read_only=True)
     class Meta:
         model = Review
         exclude = ('watchlist',)
