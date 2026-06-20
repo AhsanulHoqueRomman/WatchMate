@@ -207,6 +207,27 @@ class ReviewListCreate(generics.ListCreateAPIView):
         reviewer_queryset = Review.objects.filter(watchlist = watchlist, reviewer=reviewer)
         if reviewer_queryset.exists():
             raise ValidationError("You have already reviewd this content!")
+        
+        # if watchlist.number_of_reviews == 0:
+        #     watchlist.avg_rating = serializer.validate_data['rating']
+        # else:
+        #     watchlist.avg_rating = (watchlist.avg_rating + serializer.validated_data['rating']) /2
+            
+        # watchlist.number_of_reviews = watchlist.number_of_reviews + 1
+        # watchlist.save()
+        
+        #Another way to count the Average rating of watchlist:
+        
+        ## Get the new rating from validated data:
+        rating = serializer.validated_data['rating']
+        # Calculate total rating before adding new review:
+        total_rating =(watchlist.avg_rating * watchlist.number_of_reviews)
+        # Update review count:
+        watchlist.number_of_reviews = watchlist.number_of_reviews + 1
+        # Calculate new average rating:
+        watchlist.avg_rating = (total_rating + rating ) / watchlist.number_of_reviews
+        watchlist.save()
+    
         serializer.save(watchlist=watchlist, reviewer=reviewer)
     
 # class ReviewCreate(generics.CreateAPIView):
