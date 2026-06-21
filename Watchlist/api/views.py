@@ -192,7 +192,7 @@ class ReviewDetails(mixins.RetrieveModelMixin, mixins.UpdateModelMixin, mixins.D
 class ReviewListCreate(generics.ListCreateAPIView):
     # queryset = Review.objects.all()
     serializer_class = ReviewSerializer
-    permission_classes = [IsAuthenticatedOrReadOnly]
+    permission_classes = [IsAuthenticated]
     
     
     def get_queryset(self):

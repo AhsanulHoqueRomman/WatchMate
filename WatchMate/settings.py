@@ -133,3 +133,11 @@ STATIC_URL = 'static/'
 #         'rest_framework.permissions.IsAuthenticated',
 #     ]
 # }
+
+# Basic Authentication classes: 
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.BasicAuthentication',
+    ]
+}
