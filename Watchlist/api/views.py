@@ -238,10 +238,10 @@ class ReviewListCreate(generics.ListCreateAPIView):
 #         watchlist = WatchList.objects.get(pk=pk)
 #         serializer.save(watchlist=watchlist)
     
-class ReviewDetails(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Review.objects.all()
-    serializer_class = ReviewSerializer
-    permission_classes = [ReviewUserOrReadOnly]
+# class ReviewDetails(generics.RetrieveUpdateDestroyAPIView):
+#     queryset = Review.objects.all()
+#     serializer_class = ReviewSerializer
+#     permission_classes = [ReviewUserOrReadOnly]
 
 
 
