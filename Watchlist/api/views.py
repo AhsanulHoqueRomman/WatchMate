@@ -7,10 +7,14 @@ from rest_framework import mixins, generics
 from rest_framework import viewsets
 from rest_framework.exceptions import ValidationError
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
+from rest_framework.throttling import UserRateThrottle, AnonRateThrottle, ScopedRateThrottle
+
+
 
 from Watchlist.models import WatchList, StreamPlatform, Review
 from Watchlist.api.serializers import WatchListSerializer, StreamPlatformSerializer, ReviewSerializer
 from Watchlist.api.permissions import IsAdminOrReadOnly, IsReviewUserOrReadOnly
+from Watchlist.api.throttling import WatchListAVThrottle, ReviewListCreateThrottle
 
 
 #Below are the FUNCTION BASED VIEWS:
@@ -59,7 +63,8 @@ def movie_details(request,pk):
 
 
 class WatchListAV(APIView):
-    permission_classes = [IsAdminOrReadOnly]
+    # permission_classes = [IsAdminOrReadOnly]
+    throttle_classes = [WatchListAVThrottle]
     
     def get(self, request):
         movies = WatchList.objects.all()
@@ -197,6 +202,8 @@ class ReviewListCreate(generics.ListCreateAPIView):
     # queryset = Review.objects.all()
     serializer_class = ReviewSerializer
     permission_classes = [IsAuthenticated]
+    # throttle_classes = [ReviewListCreateThrottle]     #This is the custom throttle class and called it in this view.
+    throttle_classes = [UserRateThrottle, AnonRateThrottle]   #These are the default throttling classes for user and anony user django provides us.
     
     
     def get_queryset(self):
@@ -246,6 +253,10 @@ class ReviewDetails(generics.RetrieveUpdateDestroyAPIView):
     queryset = Review.objects.all()
     serializer_class = ReviewSerializer
     permission_classes = [IsReviewUserOrReadOnly]
+    # throttle_classes = [UserRateThrottle, AnonRateThrottle]  
+    throttle_classes = [ScopedRateThrottle]   #By using ScopedRateThrottle class we can customize scope name and the limitation of throttling.
+    throttle_scope = 'review-detail'
+
 
 
 

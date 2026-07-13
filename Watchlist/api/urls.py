@@ -22,6 +22,6 @@ urlpatterns = [
     
     # path('stream/<int:pk>/review_create', views.ReviewCreate.as_view(), name='ReviewCreate'),
     path('<int:pk>/reviews/', views.ReviewListCreate.as_view(), name='ReviewListCreate'),
-    path('reviews/<int:pk>', views.ReviewDetails.as_view(), name='ReviewDetails'),
+    path('reviews/<int:pk>/', views.ReviewDetails.as_view(), name='ReviewDetails'),
     
 ]
