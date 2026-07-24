@@ -24,4 +24,7 @@ urlpatterns = [
     path('<int:pk>/reviews/', views.ReviewListCreate.as_view(), name='ReviewListCreate'),
     path('reviews/<int:pk>/', views.ReviewDetails.as_view(), name='ReviewDetails'),
     
+    # path('reviews/<str:username>/', views.UserReview.as_view(), name='user-review-detail'),   #For filtering against urls
+    path('reviews/', views.UserReview.as_view(), name='user-review-detail'),
+    
 ]

@@ -198,6 +198,27 @@ class ReviewDetails(mixins.RetrieveModelMixin, mixins.UpdateModelMixin, mixins.D
 
 #Usinng Concrete view classes - Gnereic APIView classes
 
+class UserReview(generics.ListAPIView):
+    serializer_class = ReviewSerializer
+   
+   ### Here is a example usage of filtering against the URL means filtering data using values extracted from the URL path:
+    
+    # def get_queryset(self):
+    #     username = self.kwargs['username']
+    #     return Review.objects.filter(reviewer__username = username)
+    
+    
+    ## Here is a example of filtering against the query parameters means filterinf data using query string :
+    
+    def get_queryset(self):
+        queryset = Review.objects.all()
+        username = self.request.query_params.get('username')
+        if username:
+            queryset = queryset.filter(reviewer__username = username)
+        return queryset
+    
+    
+
 class ReviewListCreate(generics.ListCreateAPIView):
     # queryset = Review.objects.all()
     serializer_class = ReviewSerializer
