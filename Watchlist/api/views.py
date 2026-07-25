@@ -8,6 +8,8 @@ from rest_framework import viewsets
 from rest_framework.exceptions import ValidationError
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 from rest_framework.throttling import UserRateThrottle, AnonRateThrottle, ScopedRateThrottle
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import filters
 
 
 
@@ -60,6 +62,23 @@ def movie_details(request,pk):
         
 '''
 
+## Just for example We are going to use a generic class for Watchlist to use search filter on watch list:
+
+
+# class WatchList(generics.ListAPIView):
+#     queryset = WatchList.objects.all()
+#     serializer_class = WatchListSerializer 
+#     filter_backends = [filters.SearchFilter]
+#     search_fields  = ['title', 'platform__name']
+
+## Just for example We are going to use a generic class for Watchlist to use ordering on watch list:
+    
+class WatchList(generics.ListAPIView):
+    queryset = WatchList.objects.all()
+    serializer_class = WatchListSerializer 
+    filter_backends = [filters.OrderingFilter]
+    ordering_fields   = ['avg_rating']
+    
 
 
 class WatchListAV(APIView):
@@ -217,14 +236,22 @@ class UserReview(generics.ListAPIView):
             queryset = queryset.filter(reviewer__username = username)
         return queryset
     
-    
+## By default DjangoFilterBackend filters for the exact matches in case of title or string. Filter normally works well with range,rating,review etc.
+#But in case we want to filter with lookup expressions we have to use a dictionary in filterset_fields.
+#Like- 
+# filterset_fields = {
+#     'reviewer__username': ['exact', 'icontains'],
+#     'active': ['exact'],
+# }
 
 class ReviewListCreate(generics.ListCreateAPIView):
     # queryset = Review.objects.all()
     serializer_class = ReviewSerializer
-    permission_classes = [IsAuthenticated]
+    # permission_classes = [IsAuthenticated]
     # throttle_classes = [ReviewListCreateThrottle]     #This is the custom throttle class and called it in this view.
     throttle_classes = [UserRateThrottle, AnonRateThrottle]   #These are the default throttling classes for user and anony user django provides us.
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['reviewer__username', 'active']
     
     
     def get_queryset(self):
