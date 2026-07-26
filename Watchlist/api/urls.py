@@ -9,7 +9,7 @@ router.register('stream', StreamPlatformVS , basename='stream' )
 urlpatterns = [
     path('list/', views.WatchListAV.as_view(), name='WatchListAV'),
     path('list/<int:pk>/', views.WatchDetailsAV.as_view(), name='WatchDetailsAV'),
-    path('list2/', views.WatchList.as_view(), name='watch-list'),   #Just for example usage to see searh filter is working or not!
+    path('list2/', views.WatchListGV.as_view(), name='watch-list'),   #Just for example usage to see searh filter is working or not!
     
     #APIView class Urls:
     # path('stream/', views.StreamPlatformAV.as_view(), name='stream'),

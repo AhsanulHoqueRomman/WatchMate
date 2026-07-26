@@ -10,7 +10,7 @@ from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnl
 from rest_framework.throttling import UserRateThrottle, AnonRateThrottle, ScopedRateThrottle
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters
-
+from rest_framework.filters import OrderingFilter
 
 
 from Watchlist.models import WatchList, StreamPlatform, Review
@@ -63,7 +63,7 @@ def movie_details(request,pk):
 '''
 
 ## Just for example We are going to use a generic class for Watchlist to use search filter on watch list:
-
+# Url structur will be :  http://example.com/api/users?search=keyword
 
 # class WatchList(generics.ListAPIView):
 #     queryset = WatchList.objects.all()
@@ -72,8 +72,10 @@ def movie_details(request,pk):
 #     search_fields  = ['title', 'platform__name']
 
 ## Just for example We are going to use a generic class for Watchlist to use ordering on watch list:
+# Url structur will be :  http://example.com/api/users?ordering=account,username
+# By default it orders as ascending ; But using a minus before ordering fileds name it will order by descending(ex: ordering=-avg_rating)
     
-class WatchList(generics.ListAPIView):
+class WatchListGV(generics.ListAPIView):
     queryset = WatchList.objects.all()
     serializer_class = WatchListSerializer 
     filter_backends = [filters.OrderingFilter]
