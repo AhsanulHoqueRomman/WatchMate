@@ -147,7 +147,12 @@ REST_FRAMEWORK = {
         'watch-list' : '5/day',
         'review-list' : '4/day', 
         'review_detail' : '3/day', 
-    }
+    },
+    
+    #Global settings of Pagination for all views:
+    
+    # 'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
+    # 'PAGE_SIZE': 5,
     
 }
 
