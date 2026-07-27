@@ -17,7 +17,7 @@ from Watchlist.models import WatchList, StreamPlatform, Review
 from Watchlist.api.serializers import WatchListSerializer, StreamPlatformSerializer, ReviewSerializer
 from Watchlist.api.permissions import IsAdminOrReadOnly, IsReviewUserOrReadOnly
 from Watchlist.api.throttling import WatchListAVThrottle, ReviewListCreateThrottle
-from Watchlist.api.pagination import WatchListPagination
+from Watchlist.api.pagination import WatchListPagination, WatchListLimitOffsetPagination, WatchListCursorPagination
 
 
 #Below are the FUNCTION BASED VIEWS:
@@ -79,7 +79,9 @@ def movie_details(request,pk):
 class WatchListGV(generics.ListAPIView):
     queryset = WatchList.objects.all()
     serializer_class = WatchListSerializer 
-    pagination_class = WatchListPagination
+    # pagination_class = WatchListPagination 
+    pagination_class = WatchListLimitOffsetPagination
+    # pagination_class = WatchListCursorPagination
     filter_backends = [filters.OrderingFilter]
     ordering_fields   = ['avg_rating']
     
