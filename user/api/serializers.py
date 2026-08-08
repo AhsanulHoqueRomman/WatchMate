@@ -4,6 +4,7 @@ from rest_framework import serializers
 
 class RegistrationSerializer(serializers.ModelSerializer):
     password2= serializers.CharField(style={'input_type':'password'}, write_only=True)
+    email = serializers.EmailField(required=True)
     
     class Meta:
         model = User
@@ -19,10 +20,10 @@ class RegistrationSerializer(serializers.ModelSerializer):
         
         
         if password != password2 :
-            raise serializers.ValidationError({'Error' : 'Password must be same'})
+            raise serializers.ValidationError({'Error' : 'Passwords dp not match.'})
         
         if User.objects.filter(email= self.validated_data['email']).exists():
-            raise serializers.ValidationError({'Error':'Email already exist'})
+            raise serializers.ValidationError({'email':'Email already exist'})
         
         user= User(email= self.validated_data['email'],username= self.validated_data['username'])
         user.set_password(password)
