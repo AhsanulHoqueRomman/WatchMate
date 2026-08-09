@@ -160,8 +160,8 @@ class LogOutTestCase(APITestCase):
             password="NewPassword@123"
         )
 
-        self.token = Token.objects.create(user=self.user)
-        # self.token = Token.objects.get(user=self.user)
+        # self.token = Token.objects.create(user=self.user)
+        self.token = Token.objects.get(user=self.user)
         self.url = reverse("logout")
         
     
@@ -171,8 +171,8 @@ class LogOutTestCase(APITestCase):
         response = self.client.post(self.url)
         self.assertEqual(response.status_code,status.HTTP_200_OK)
         
-    # def test_logout_without_authentication(self):
+    def test_logout_without_authentication(self):
         
-    #     response = self.client.post(self.url)
-    #     self.assertEqual(response.status_code,status.HTTP_401_UNAUTHORIZED)
+        response = self.client.post(self.url)
+        self.assertEqual(response.status_code,status.HTTP_401_UNAUTHORIZED)
     
