@@ -254,7 +254,7 @@ class UserReview(generics.ListAPIView):
 class ReviewListCreate(generics.ListCreateAPIView):
     # queryset = Review.objects.all()
     serializer_class = ReviewSerializer
-    # permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated]
     # throttle_classes = [ReviewListCreateThrottle]     #This is the custom throttle class and called it in this view.
     throttle_classes = [UserRateThrottle, AnonRateThrottle]   #These are the default throttling classes for user and anony user django provides us.
     filter_backends = [DjangoFilterBackend]
@@ -310,7 +310,7 @@ class ReviewDetails(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [IsReviewUserOrReadOnly]
     # throttle_classes = [UserRateThrottle, AnonRateThrottle]  
     throttle_classes = [ScopedRateThrottle]   #By using ScopedRateThrottle class we can customize scope name and the limitation of throttling.
-    throttle_scope = 'review-detail'
+    throttle_scope = 'review_detail'
 
 
 
